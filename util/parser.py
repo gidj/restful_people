@@ -23,7 +23,8 @@ class FileParser(object):
         people = tuple(self._line_parser(line) for line in self._raw_lines)
         return people
 
-    def _line_delimiter(line: str) -> str:
+    @staticmethod
+    def delimiter_from_line(line: str) -> str:
         delimiter = " "
         if "," in line:
             delimiter = ","
@@ -34,6 +35,22 @@ class FileParser(object):
     @property
     def people(self):
         return self._people
+
+    @property
+    def people_by_gender(self):
+        pass
+
+    @property
+    def people_by_last_name(self):
+        pass
+
+    @property
+    def people_by_birth_date(self):
+        pass
+
+
+class LineParseException(Exception):
+    pass
 
 
 class LineParser(object):
@@ -46,7 +63,10 @@ class LineParser(object):
 
     def parse_line(self, line: str) -> Person:
         split_line = line.split(self._delimiter)
-        person = self._line_as_person(split_line)
+        try:
+            person = self._line_as_person(split_line)
+        except TypeError:
+            raise LineParseException("Line is misformatted, or delimiter is incorrect")
         return person
 
     def _line_as_person(self, line_list: list) -> Person:

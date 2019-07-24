@@ -1,6 +1,10 @@
 import unittest
 
-from util.parser import FileParser, LineParser
+from util.parser import FileParser, LineParseException, LineParser
+
+
+class TestFileParser(unittest.TestCase):
+    pass
 
 
 class TestLineParser(unittest.TestCase):
@@ -39,8 +43,15 @@ class TestLineParser(unittest.TestCase):
         line_parser = LineParser.parser_with_delimiter("|")
         person = line_parser.parse_line(test_line)
 
-        assert person.first_name == self.FIRST_NAME
-        assert person.last_name == self.LAST_NAME
-        assert person.gender == self.GENDER
-        assert person.favorite_color == self.FAVORITE_COLOR
-        assert person.date_of_birth == self.DATE_OF_BIRTH
+        self.assertEqual(person.first_name, self.FIRST_NAME)
+        self.assertEqual(person.last_name, self.LAST_NAME)
+        self.assertEqual(person.gender, self.GENDER)
+        self.assertEqual(person.favorite_color, self.FAVORITE_COLOR)
+        self.assertEqual(person.date_of_birth, self.DATE_OF_BIRTH)
+
+    def test_incorrect_delimiter_throws_exception(self):
+        test_line = " ".join(self.TEST)
+        line_parser = LineParser.parser_with_delimiter("|")
+
+        with self.assertRaises(LineParseException):
+            person = line_parser.parse_line(test_line)
