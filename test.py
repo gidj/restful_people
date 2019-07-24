@@ -1,10 +1,28 @@
+import io
+import random
 import unittest
 
 from util.parser import FileParser, LineParseException, LineParser
 
 
 class TestFileParser(unittest.TestCase):
-    pass
+    PERSON_1 = ("Adams", "Adam", "male", "red", "4/7/2000")
+    PERSON_2 = ("Stewart", "Patrick", "male", "cyan", "2/17/1970")
+    PERSON_3 = ("Zipperman", "Petunia", "female", "blue", "12/27/1990")
+
+    def _build_test_file(self, delimiter: str):
+        data = [self.PERSON_1, self.PERSON_2, self.PERSON_3]
+        random.shuffle(data)
+        lines = list(map(delimiter.join, data))
+        file_data = "\n".join(lines)
+        return io.StringIO(file_data)
+
+    def test_coma_file(self):
+        parser = FileParser(self._build_test_file(","))
+        print(parser._raw_lines)
+
+    def test_file_generation(self):
+        print(self._build_test_file(","))
 
 
 class TestLineParser(unittest.TestCase):
