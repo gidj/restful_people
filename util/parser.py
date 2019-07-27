@@ -1,5 +1,6 @@
 import collections
-from typing import TextIO, List
+from datetime import datetime
+from typing import List, TextIO
 
 Person = collections.namedtuple(
     "Person", "last_name, first_name, gender, favorite_color, date_of_birth"
@@ -45,12 +46,14 @@ class FileParser(object):
         female = filter(lambda p: p.gender == "female", self._people)
         male = filter(lambda p: p.gender == "male", self._people)
 
-        return tuple(sorted(female, key=_key) + sorted(male, key=_key))
+        _sorted = tuple(sorted(female, key=_key) + sorted(male, key=_key))
+        return _sorted
 
     @property
     def people_by_last_name(self) -> List[Person]:
         def _key(person):
             return person.last_name.lower()
+
         return sorted(self._people, key=_key)
 
     @property
@@ -74,10 +77,12 @@ class LineParser(object):
         split_line = line.split(self._delimiter)
         try:
             person = self._line_as_person(split_line)
-        except TypeError:
+        except (IndexError, TypeError):
             raise LineParseException("Line is misformatted, or delimiter is incorrect")
         return person
 
     def _line_as_person(self, line_list: list) -> Person:
-        person = Person(*line_list)
+        _line_with_date = line_list[:4]
+        _line_with_date.append(datetime.strptime(line_list[4], "%m/%d/%Y"))
+        person = Person(*_line_with_date)
         return person

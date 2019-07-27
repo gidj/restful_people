@@ -1,8 +1,9 @@
 import io
 import random
 import unittest
+from datetime import datetime
 
-from util.parser import FileParser, LineParseException, LineParser
+from util.parser import FileParser, LineParseException, LineParser, Person
 
 
 class TestFileParser(unittest.TestCase):
@@ -16,7 +17,6 @@ class TestFileParser(unittest.TestCase):
         lines = list(map(delimiter.join, data))
         file_data = "\n".join(lines)
         return io.StringIO(file_data)
-
 
     def test_people_by_gender(self):
         test_file = self._build_test_file(",")
@@ -48,42 +48,36 @@ class TestLineParser(unittest.TestCase):
     FIRST_NAME = "FirstName"
     GENDER = "Gender"
     FAVORITE_COLOR = "FavoriteColor"
-    DATE_OF_BIRTH = "DateOfBirth"
+    DATE_OF_BIRTH = "9/5/2000"
 
     TEST = (LAST_NAME, FIRST_NAME, GENDER, FAVORITE_COLOR, DATE_OF_BIRTH)
+
+    def _verify_person_object(self, person: Person):
+        self.assertEqual(person.first_name, self.FIRST_NAME)
+        self.assertEqual(person.last_name, self.LAST_NAME)
+        self.assertEqual(person.gender, self.GENDER)
+        self.assertEqual(person.favorite_color, self.FAVORITE_COLOR)
+        self.assertEqual(
+            person.date_of_birth, datetime.strptime(self.DATE_OF_BIRTH, "%m/%d/%Y")
+        )
 
     def test_commma_line(self):
         test_line = ",".join(self.TEST)
         line_parser = LineParser.parser_with_delimiter(",")
         person = line_parser.parse_line(test_line)
-
-        assert person.first_name == self.FIRST_NAME
-        assert person.last_name == self.LAST_NAME
-        assert person.gender == self.GENDER
-        assert person.favorite_color == self.FAVORITE_COLOR
-        assert person.date_of_birth == self.DATE_OF_BIRTH
+        self._verify_person_object(person)
 
     def test_space_line(self):
         test_line = " ".join(self.TEST)
         line_parser = LineParser.parser_with_delimiter(" ")
         person = line_parser.parse_line(test_line)
-
-        assert person.first_name == self.FIRST_NAME
-        assert person.last_name == self.LAST_NAME
-        assert person.gender == self.GENDER
-        assert person.favorite_color == self.FAVORITE_COLOR
-        assert person.date_of_birth == self.DATE_OF_BIRTH
+        self._verify_person_object(person)
 
     def test_pipe_line(self):
         test_line = "|".join(self.TEST)
         line_parser = LineParser.parser_with_delimiter("|")
         person = line_parser.parse_line(test_line)
-
-        self.assertEqual(person.first_name, self.FIRST_NAME)
-        self.assertEqual(person.last_name, self.LAST_NAME)
-        self.assertEqual(person.gender, self.GENDER)
-        self.assertEqual(person.favorite_color, self.FAVORITE_COLOR)
-        self.assertEqual(person.date_of_birth, self.DATE_OF_BIRTH)
+        self._verify_person_object(person)
 
     def test_incorrect_delimiter_throws_exception(self):
         test_line = " ".join(self.TEST)
