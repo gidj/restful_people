@@ -2,9 +2,24 @@ import collections
 from datetime import datetime
 from typing import List, TextIO
 
-Person = collections.namedtuple(
-    "Person", "last_name, first_name, gender, favorite_color, date_of_birth"
-)
+
+class Person(
+    collections.namedtuple(
+        "Person", "last_name, first_name, gender, favorite_color, date_of_birth"
+    )
+):
+    @property
+    def date_of_birth_formatted(self):
+        return datetime.strftime(self.date_of_birth, "%m/%d/%Y")
+
+    def __str__(self):
+        return "last_name={}, first_name={}, gender={}, favorite_color={}, date_of_birth={}".format(
+            self.last_name,
+            self.first_name,
+            self.gender,
+            self.favorite_color,
+            self.date_of_birth_formatted,
+        )
 
 
 class FileParser(object):
