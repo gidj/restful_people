@@ -1,4 +1,5 @@
 import collections
+from typing import TextIO
 
 Person = collections.namedtuple(
     "Person", "last_name, first_name, gender, favorite_color, date_of_birth"
@@ -6,13 +7,13 @@ Person = collections.namedtuple(
 
 
 class FileParser(object):
-    def __init__(self, filename):
-        with open(filename, "r") as f:
-            self._raw_lines = tuple(f.readlines())
+    def __init__(self, data_file: TextIO):
+        data_file.seek(0)
+        self._raw_lines = tuple(data_file.read().splitlines())
 
         if self._raw_lines:
             self._line_parser = LineParser.parser_with_delimiter(
-                self._line_delimiter(self._raw_lines[0])
+                self.delimiter_from_line(self._raw_lines[0])
             )
         else:
             self._line_parser = LineParser()
@@ -20,7 +21,7 @@ class FileParser(object):
         self._people = self._get_people_from_raw_lines(self._raw_lines)
 
     def _get_people_from_raw_lines(self, raw_lines: tuple):
-        people = tuple(self._line_parser(line) for line in self._raw_lines)
+        people = tuple(self._line_parser.parse_line(line) for line in self._raw_lines)
         return people
 
     @staticmethod
