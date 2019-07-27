@@ -1,5 +1,5 @@
 import collections
-from typing import TextIO
+from typing import TextIO, List
 
 Person = collections.namedtuple(
     "Person", "last_name, first_name, gender, favorite_color, date_of_birth"
@@ -34,19 +34,21 @@ class FileParser(object):
         return delimiter
 
     @property
-    def people(self):
+    def people(self) -> List[Person]:
         return self._people
 
     @property
-    def people_by_gender(self):
+    def people_by_gender(self) -> List[Person]:
         pass
 
     @property
-    def people_by_last_name(self):
-        pass
+    def people_by_last_name(self) -> List[Person]:
+        def _key(person):
+            return person.last_name.lower()
+        return sorted(self._people, key=_key)
 
     @property
-    def people_by_birth_date(self):
+    def people_by_birth_date(self) -> List[Person]:
         pass
 
 

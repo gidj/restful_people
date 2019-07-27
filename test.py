@@ -17,12 +17,30 @@ class TestFileParser(unittest.TestCase):
         file_data = "\n".join(lines)
         return io.StringIO(file_data)
 
-    def test_coma_file(self):
-        parser = FileParser(self._build_test_file(","))
-        print(parser._raw_lines)
 
-    def test_file_generation(self):
-        print(self._build_test_file(","))
+    def test_people_by_gender(self):
+        test_file = self._build_test_file(",")
+        file_parser = FileParser(test_file)
+        people_list = file_parser.people_by_gender
+        self.assertEqual(people_list[0].last_name, self.PERSON_3[0])
+        self.assertEqual(people_list[1].last_name, self.PERSON_1[0])
+        self.assertEqual(people_list[2].last_name, self.PERSON_2[0])
+
+    def test_people_by_last_name(self):
+        test_file = self._build_test_file(",")
+        file_parser = FileParser(test_file)
+        people_list = file_parser.people_by_last_name
+        self.assertEqual(people_list[0].last_name, self.PERSON_1[0])
+        self.assertEqual(people_list[1].last_name, self.PERSON_2[0])
+        self.assertEqual(people_list[2].last_name, self.PERSON_3[0])
+
+    def test_people_by_birth_date(self):
+        test_file = self._build_test_file(",")
+        file_parser = FileParser(test_file)
+        people_list = file_parser.people_by_birth_date
+        self.assertEqual(people_list[0].last_name, self.PERSON_2[0])
+        self.assertEqual(people_list[1].last_name, self.PERSON_3[0])
+        self.assertEqual(people_list[2].last_name, self.PERSON_1[0])
 
 
 class TestLineParser(unittest.TestCase):
