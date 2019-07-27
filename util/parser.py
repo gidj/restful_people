@@ -39,7 +39,13 @@ class FileParser(object):
 
     @property
     def people_by_gender(self) -> List[Person]:
-        pass
+        def _key(person):
+            return person.last_name.lower()
+
+        female = filter(lambda p: p.gender == "female", self._people)
+        male = filter(lambda p: p.gender == "male", self._people)
+
+        return tuple(sorted(female, key=_key) + sorted(male, key=_key))
 
     @property
     def people_by_last_name(self) -> List[Person]:
