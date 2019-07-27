@@ -1,7 +1,7 @@
 import argparse
 import sys
 
-from util.parser import FileParser, Person
+from util.parser import FileParser
 
 sort_options = set(["gender", "birth_date", "last_name"])
 
