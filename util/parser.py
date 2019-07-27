@@ -58,7 +58,10 @@ class FileParser(object):
 
     @property
     def people_by_birth_date(self) -> List[Person]:
-        pass
+        def _key(person):
+            return person.date_of_birth
+
+        return sorted(self._people, key=_key)
 
 
 class LineParseException(Exception):
