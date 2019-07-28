@@ -16,7 +16,6 @@ class TestFileParser(unittest.TestCase):
         random.shuffle(data)
         lines = list(map(delimiter.join, data))
         file_data = "\n".join(lines)
-        print(file_data)
         return io.StringIO(file_data)
 
     def test_people_by_gender(self):
