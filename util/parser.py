@@ -29,7 +29,7 @@ class FileParser(object):
 
         if self._raw_lines:
             self._line_parser = LineParser.parser_with_delimiter(
-                self.delimiter_from_line(self._raw_lines[0])
+                LineParser.delimiter_from_line(self._raw_lines[0])
             )
         else:
             self._line_parser = LineParser()
@@ -39,15 +39,6 @@ class FileParser(object):
     def _get_people_from_raw_lines(self, raw_lines: tuple):
         people = tuple(self._line_parser.parse_line(line) for line in self._raw_lines)
         return people
-
-    @staticmethod
-    def delimiter_from_line(line: str) -> str:
-        delimiter = " "
-        if "," in line:
-            delimiter = ","
-        elif "|" in line:
-            delimiter = "|"
-        return delimiter
 
     @property
     def people(self) -> List[Person]:
@@ -90,6 +81,15 @@ class LineParser(object):
     @classmethod
     def parser_with_delimiter(cls, delimiter):
         return cls(delimiter)
+
+    @staticmethod
+    def delimiter_from_line(line: str) -> str:
+        delimiter = " "
+        if "," in line:
+            delimiter = ","
+        elif "|" in line:
+            delimiter = "|"
+        return delimiter
 
     def parse_line(self, line: str) -> Person:
         split_line = line.split(self._delimiter)
