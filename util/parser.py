@@ -8,9 +8,17 @@ class Person(
         "Person", "last_name, first_name, gender, favorite_color, date_of_birth"
     )
 ):
+    DATE_FORMAT = "%m/%d/%Y"
+
+    def __new__(cls, last_name, first_name, gender, favorite_color, date_of_birth):
+        _formatted_date = datetime.strptime(date_of_birth, cls.DATE_FORMAT)
+        return super().__new__(
+            cls, last_name, first_name, gender, favorite_color, _formatted_date
+        )
+
     @property
     def date_of_birth_formatted(self):
-        return datetime.strftime(self.date_of_birth, "%m/%d/%Y")
+        return datetime.strftime(self.date_of_birth, self.DATE_FORMAT)
 
     def __str__(self):
         return "last_name={}, first_name={}, gender={}, favorite_color={}, date_of_birth={}".format(
@@ -100,7 +108,5 @@ class LineParser(object):
         return person
 
     def _line_as_person(self, line_list: list) -> Person:
-        _line_with_date = line_list[:4]
-        _line_with_date.append(datetime.strptime(line_list[4], "%m/%d/%Y"))
-        person = Person(*_line_with_date)
+        person = Person(*line_list)
         return person
