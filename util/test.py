@@ -3,7 +3,8 @@ import random
 import unittest
 from datetime import datetime
 
-from util.parser import FileParser, LineParseException, LineParser, Person
+from util.parser import FileParser, LineParseException, LineParser
+from storage.models import Person
 
 
 class TestFileParser(unittest.TestCase):

@@ -1,6 +1,6 @@
 from typing import List
 
-from util.parser import Person
+from storage.models import Person
 
 
 class DataService(object):
