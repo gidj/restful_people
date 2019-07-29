@@ -1,6 +1,7 @@
 from typing import List, TextIO
 
 from storage.models import Person
+from util.sorting import _by_birth_date, _by_gender, _by_last_name
 
 
 class FileParser(object):
@@ -27,28 +28,15 @@ class FileParser(object):
 
     @property
     def people_by_gender(self) -> List[Person]:
-        def _key(person):
-            return person.last_name.lower()
-
-        female = filter(lambda p: p.gender == "female", self._people)
-        male = filter(lambda p: p.gender == "male", self._people)
-
-        _sorted = tuple(sorted(female, key=_key) + sorted(male, key=_key))
-        return _sorted
+        return _by_gender(self._people)
 
     @property
     def people_by_last_name(self) -> List[Person]:
-        def _key(person):
-            return person.last_name.lower()
-
-        return sorted(self._people, key=_key)
+        return _by_last_name(self._people)
 
     @property
     def people_by_birth_date(self) -> List[Person]:
-        def _key(person):
-            return person.date_of_birth
-
-        return sorted(self._people, key=_key)
+        return _by_birth_date(self._people)
 
 
 class LineParseException(Exception):
