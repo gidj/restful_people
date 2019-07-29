@@ -9,7 +9,7 @@ storage = DataService()
 
 @app.route("/records", methods=["POST"])
 def records():
-    data_line = request.data
+    data_line = request.form.get('data')
     delimiter = LineParser.delimiter_from_line(data_line)
     parser = LineParser.parser_with_delimiter(delimiter)
 
@@ -25,8 +25,9 @@ def records():
 @app.route("/records/<string:sort_key>", methods=["GET"])
 def records_sorted(sort_key: str):
     people = storage.get_all()
-    response_data = map(lambda x: x._asdict, people)
-    return make_response(response_data, 200)
+    response_data = tuple(map(lambda x: x._asdict(), people))
+    response_body = {"people": response_data}
+    return make_response(response_body, 200)
 
 
 if __name__ == "__main__":
