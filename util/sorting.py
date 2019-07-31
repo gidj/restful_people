@@ -1,4 +1,4 @@
-from typing import List
+from typing import Callable, Tuple
 
 from storage.models import Person
 
@@ -7,7 +7,7 @@ GENDER = "gender"
 LAST_NAME = "last_name"
 
 
-def _by_gender(people: List[Person]) -> List[Person]:
+def _by_gender(people: Tuple[Person]) -> Tuple[Person]:
     def _key(person):
         return person.last_name.lower()
 
@@ -17,14 +17,14 @@ def _by_gender(people: List[Person]) -> List[Person]:
     return tuple(sorted(female, key=_key) + sorted(male, key=_key))
 
 
-def _by_last_name(people: List[Person]) -> List[Person]:
+def _by_last_name(people: Tuple[Person]) -> Tuple[Person]:
     def _key(person):
         return person.last_name.lower()
 
     return sorted(people, key=_key)
 
 
-def _by_birth_date(people: List[Person]) -> List[Person]:
+def _by_birth_date(people: Tuple[Person]) -> Tuple[Person]:
     def _key(person):
         return person.date_of_birth
 
@@ -35,7 +35,11 @@ class SortingElementNotFoundException(Exception):
     pass
 
 
-def sort_people_by(sort_element: str, people: List[Person]):
+def sort_people_by(sort_element: str, people: Tuple[Person]):
+    return people_sorter(sort_element)(people)
+
+
+def people_sorter(sort_element: str) -> Callable[[Tuple[Person]], Tuple[Person]]:
     _sort_dict = {
         BIRTH_DATE: _by_birth_date,
         GENDER: _by_gender,
@@ -47,4 +51,4 @@ def sort_people_by(sort_element: str, people: List[Person]):
     except KeyError:
         raise SortingElementNotFoundException()
 
-    return _sort_function(people)
+    return _sort_function
