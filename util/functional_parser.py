@@ -4,7 +4,7 @@ from storage.models import Person
 
 
 def people_from_file(file: TextIO) -> Tuple[Person]:
-    lines = _file_lines(file)
+    lines = _lines_from_file(file)
     return tuple(map(person_from_line, lines))
 
 
@@ -13,7 +13,7 @@ def person_from_line(line: str) -> Person:
     return Person.make(parsed_line)
 
 
-def _file_lines(file: TextIO) -> Tuple[str]:
+def _lines_from_file(file: TextIO) -> Tuple[str]:
     file.seek(0)
     return tuple(file.read().splitlines())
 
