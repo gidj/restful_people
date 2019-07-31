@@ -5,8 +5,12 @@ from storage.models import Person
 
 def people_from_file(file: TextIO) -> Tuple[Person]:
     lines = _file_lines(file)
-    parsed_lines = map(_parse_line, lines)
-    return tuple(map(Person.make, parsed_lines))
+    return tuple(map(person_from_line, lines))
+
+
+def person_from_line(line: str) -> Person:
+    parsed_line = _parse_line(line)
+    return Person.make(parsed_line)
 
 
 def _file_lines(file: TextIO) -> Tuple[str]:
