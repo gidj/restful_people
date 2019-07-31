@@ -19,6 +19,10 @@ class Person(
     def date_of_birth_formatted(self):
         return datetime.strftime(self.date_of_birth, self.DATE_FORMAT)
 
+    @classmethod
+    def make(cls, iterable):
+        return cls(*iterable)
+
     def __str__(self):
         return "last_name={}, first_name={}, gender={}, favorite_color={}, date_of_birth={}".format(
             self.last_name,

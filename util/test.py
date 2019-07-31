@@ -3,8 +3,10 @@ import random
 import unittest
 from datetime import datetime
 
-from util.parser import FileParser, LineParseException, LineParser
 from storage.models import Person
+from util.functional_parser import people_from_file
+from util.parser import FileParser, LineParseException, LineParser
+from util.sorting import people_sorter
 
 
 class TestFileParser(unittest.TestCase):
@@ -42,6 +44,16 @@ class TestFileParser(unittest.TestCase):
         self.assertEqual(people_list[0].last_name, self.PERSON_2[0])
         self.assertEqual(people_list[1].last_name, self.PERSON_3[0])
         self.assertEqual(people_list[2].last_name, self.PERSON_1[0])
+
+    def test_functional_people_by_birth_date(self):
+        test_file = self._build_test_file(",")
+        people_list = people_from_file(test_file)
+        print(people_list)
+        sorted_list = people_sorter("birthdate")(people_list)
+        print(sorted_list)
+        self.assertEqual(sorted_list[0].last_name, self.PERSON_2[0])
+        self.assertEqual(sorted_list[1].last_name, self.PERSON_3[0])
+        self.assertEqual(sorted_list[2].last_name, self.PERSON_1[0])
 
 
 class TestLineParser(unittest.TestCase):

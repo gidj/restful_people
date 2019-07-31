@@ -3,10 +3,10 @@ from typing import Callable, TextIO, Tuple
 from storage.models import Person
 
 
-def file_to_people(file: TextIO) -> Tuple[Person]:
+def people_from_file(file: TextIO) -> Tuple[Person]:
     lines = _file_lines(file)
     parsed_lines = map(_parse_line, lines)
-    return tuple(map(Person._make, parsed_lines))
+    return tuple(map(Person.make, parsed_lines))
 
 
 def _file_lines(file: TextIO) -> Tuple[str]:
